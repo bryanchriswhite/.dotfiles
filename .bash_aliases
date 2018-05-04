@@ -1,0 +1,7 @@
+alias di="docker images | head"
+alias dc="docker-compose"
+alias dcps="docker-compose ps"
+alias dps="docker ps"
+alias dstart="docker start -ai"
+alias dexec="docker exec -it"
+alias pyenv=". ./env/bin/activate"
