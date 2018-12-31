@@ -40,7 +40,6 @@ for f in $files; do
 
   if [ -f $link_path ]; then
     echo "File $link_path exists and is not a symlink; NOT OVERWRITING!";
-    exit 1;
   else
     echo "creating symlink from $target_path to $link_path"
     ln -s $target_path $link_path;
