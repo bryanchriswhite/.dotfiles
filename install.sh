@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir=$(dirname $0)
+dir=$(dirname $(realpath $0))
 files=".gitconfig
 .vimrc
 .tmux.conf
@@ -8,7 +8,7 @@ files=".gitconfig
 .bash_aliases
 .bash_functions"
 
-git submodules update --init
+cd $dir && git submodule update --init
 
 # Vim plugins
 vim_autoload=$HOME/.vim/autoload
@@ -35,18 +35,15 @@ fi
 
 # Dotfiles
 for f in $files; do
-  target_path=$(realpath "$dir/$f");
+  target_path="$dir/$f";
   link_path="$HOME/$f";
 
   if [ -f $link_path ]; then
-    if [ -h $link_path ]; then
-      rm -i $link_path;
-    else
-      echo "File $link_path exists and is not a symlink; NOT OVERWRITING!";
-      exit 1;
-    fi
+    echo "File $link_path exists and is not a symlink; NOT OVERWRITING!";
+    exit 1;
+  else
+    echo "creating symlink from $target_path to $link_path"
+    ln -s $target_path $link_path;
   fi
 
-  echo "creating symlink from $target_path to $link_path"
-  ln -s $target_path $link_path;
 done
