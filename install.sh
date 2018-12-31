@@ -1,5 +1,6 @@
 #!/bin/bash
 
+dir=$(dirname $0)
 files=".gitconfig
 .vimrc
 .tmux.conf
@@ -8,9 +9,8 @@ files=".gitconfig
 .bash_functions"
 
 for f in $files; do
-  target_path=$(realpath "./$f");
-  filename=$(basename $target_path);
-  link_path="$HOME/$filename";
+  target_path=$(realpath "$dir/$f");
+  link_path="$HOME/$f";
 
   if [ -f $link_path ]; then
     if [ -h $link_path ]; then
