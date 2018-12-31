@@ -1,12 +1,25 @@
 #!/bin/bash
 
+# Variables
 dir=$(dirname $(realpath $0))
 files=".gitconfig
 .vimrc
-.tmux.conf
-.bashrc
-.bash_aliases
-.bash_functions"
+.tmux.conf"
+bashrc="$HOME/.bashrc"
+bash_files=".bash_aliases
+.bash_functions
+.bash_ps1"
+to_link=("${files[@]}" "${bash_files[@]}")
+
+for f in $bash_files; do
+  if ! grep -qP '(?<!#)(source|\.)\s+.*'$f $bashrc; then
+    cat >> $bashrc << EOF
+if [ -f ~/$f ]; then
+  . ~/$f
+fi
+EOF
+  fi
+done
 
 cd $dir && git submodule update --init
 
@@ -33,8 +46,8 @@ if [ ! -e $vim_nerdtree ]; then
   ln -s "$dir/vim/nerdtree" $vim_nerdtree;
 fi
 
-# Dotfiles
-for f in $files; do
+# Symlink dotfiles
+for f in ${to_link[@]}; do
   target_path="$dir/$f";
   link_path="$HOME/$f";
 
