@@ -8,6 +8,32 @@ files=".gitconfig
 .bash_aliases
 .bash_functions"
 
+git submodules update --init
+
+# Vim plugins
+vim_autoload=$HOME/.vim/autoload
+vim_bundle=$HOME/.vim/bundle
+vim_pathogen=$vim_autoload/pathogen.vim
+vim_nerdtree=$vim_bundle/nerdtree
+if [ ! -d $vim_autoload ]; then
+  mkdir -p $vim_autoload
+fi
+
+if [ ! -d $vim_bundle ]; then
+  mkdir -p $vim_bundle
+fi
+
+if [ ! -e $vim_pathogen ]; then
+  echo "Creating vim pathogen symlink";
+  ln -s "$dir/vim/vim-pathogen/autoload/pathogen.vim" $vim_pathogen;
+fi
+
+if [ ! -e $vim_nerdtree ]; then
+  echo "Creating vim nerdtree symlink";
+  ln -s "$dir/vim/nerdtree" $vim_nerdtree;
+fi
+
+# Dotfiles
 for f in $files; do
   target_path=$(realpath "$dir/$f");
   link_path="$HOME/$f";
