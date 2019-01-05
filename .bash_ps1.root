@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-#PS1 stuff
+#PS1 stuff (root)
 dir=$(dirname $(realpath -P $BASH_SOURCE))
 . ${dir}/defaults.sh
 . ${dir}/ps1_git.sh
 
-export PS1="\e[01;32m\t \e[01;34m\w \e[00m\`parse_git_branch\`
+export PS1="\e[01;31m\t (\u) \e[01;34m\w \e[00m\`parse_git_branch\`
 $ "
