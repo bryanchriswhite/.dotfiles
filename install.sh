@@ -1,24 +1,32 @@
 #!/bin/bash
 
 # Variables
+ps1_prefix=$1
 dir=$(dirname $(realpath $0))
+bashrc="${HOME}/.bashrc"
 files=".gitconfig
 .vimrc
 .tmux.conf"
-bashrc="${HOME}/.bashrc"
-bash_files=".bash_aliases
+to_source=".bash_aliases
 .bash_functions
 .bash_ps1"
-to_link=("${files[@]}" "${bash_files[@]}")
+to_link=("${files[@]}" "${to_source[@]}")
 
-for f in $bash_files; do
-  if ! grep -qP '(?<!#)(source|\.)\s+.*'${f} ${bashrc}; then
-    cat >> ${bashrc} << EOF
+ensure_line() {
+  if ! grep -qP $1 ${bashrc}; then
+    echo "no line $1"
+    cat >> ${bashrc}
+  else
+    echo "yes line $1"
+  fi
+}
+
+for f in $to_source; do
+  ensure_line '(?<!#)(source|\.)\s+.*'${f} << EOF
 if [ -f ~/${f} ]; then
   . ~/${f}
 fi
 EOF
-  fi
 done
 
 cd ${dir} && git submodule update --init
@@ -51,10 +59,8 @@ for f in ${to_link[@]}; do
   user=$(whoami)
   user_target=${dir}/${f}.${user}
   if [[ -e ${user_target} ]]; then
-    echo "user target"
     target_path="${user_target}";
   else
-    echo "generic target"
     target_path="${dir}/${f}";
   fi
   link_path="${HOME}/${f}";
